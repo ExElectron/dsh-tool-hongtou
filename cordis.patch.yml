@@ -1,0 +1,4 @@
+# Mount the host-side /hongtou command in the DSH profile.
+- insert:
+    - id: hongtou
+      name: '@local/dsh-tool-hongtou'

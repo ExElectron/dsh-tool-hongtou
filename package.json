@@ -1,0 +1,35 @@
+{
+  "name": "@local/dsh-tool-hongtou",
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Cordis /hongtou command: two-phase pipeline (LLM structured JSON + deterministic Word 2003 XML template rendering)",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./schema": "./lib/schema.js",
+    "./phase1-llm": "./lib/phase1-llm.js",
+    "./phase2-render": "./lib/phase2-render.js",
+    "./fallback": "./lib/fallback.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib",
+    "templates",
+    "test",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-llm": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-session-query": "^0.1.0-rc.6"
+  }
+}

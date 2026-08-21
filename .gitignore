@@ -1,0 +1,23 @@
+# 本地备份与参考材料（不随公开仓库发布）
+Backup/
+Example/
+
+# 生成产物
+output/
+shots/*.png
+
+# 开发用一次性脚本（引用内部样板材料，不公开）
+scripts/
+
+# 依赖与本地环境
+node_modules/
+.env
+.env.*
+!.env.example
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
