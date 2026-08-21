@@ -33,9 +33,13 @@ DeepSeek Harness 红头公文总结插件（Cordis 主机侧插件）——**两
 
 ## 安装 / 挂载
 
-插件通过 `dsh.bundle.patch` 声明挂载行。从本仓库安装到 web profile：
+插件通过 `dsh.bundle.patch` 声明挂载行。安装到 web profile：
 
 ```bash
+# 从 npm 安装
+dsh plugin --profile web add dsh-tool-hongtou
+
+# 或从 GitHub 安装
 dsh plugin --profile web add github:ExElectron/dsh-tool-hongtou
 ```
 
@@ -43,9 +47,10 @@ dsh plugin --profile web add github:ExElectron/dsh-tool-hongtou
 
 ```jsonc
 "dependencies": {
-  "@local/dsh-tool-hongtou": "github:ExElectron/dsh-tool-hongtou"
+  "dsh-tool-hongtou": "^0.2.0"
+  // 或 "dsh-tool-hongtou": "github:ExElectron/dsh-tool-hongtou"
 },
-"dsh": { "profile": { "bundles": ["@local/dsh-tool-hongtou"] } }
+"dsh": { "profile": { "bundles": ["dsh-tool-hongtou"] } }
 ```
 
 挂载后**重启 dsh**（web profile 在启动时装配 bundle 补丁），然后在会话中输入：

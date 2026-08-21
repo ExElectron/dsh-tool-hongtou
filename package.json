@@ -1,5 +1,5 @@
 {
-  "name": "@local/dsh-tool-hongtou",
+  "name": "dsh-tool-hongtou",
   "version": "0.2.0",
   "type": "module",
   "description": "Cordis /hongtou command: two-phase pipeline (LLM structured JSON + deterministic Word 2003 XML template rendering)",
@@ -31,5 +31,25 @@
     "@deepseek-ai/cordis": "^4.0.1",
     "@deepseek-ai/dsh-llm": "^0.1.0-rc.6",
     "@deepseek-ai/dsh-session-query": "^0.1.0-rc.6"
-  }
+  },
+  "license": "MIT",
+  "author": "ExElectron",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExElectron/dsh-tool-hongtou.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExElectron/dsh-tool-hongtou/issues"
+  },
+  "homepage": "https://github.com/ExElectron/dsh-tool-hongtou#readme",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "dsh",
+    "hongtou",
+    "red-header",
+    "official-document",
+    "word-xml",
+    "word2003"
+  ]
 }
