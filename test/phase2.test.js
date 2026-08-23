@@ -127,3 +127,54 @@ test("escapeXml 覆盖五种字符", () => {
 test("中文日期格式", () => {
   assert.equal(chineseDate(new Date(2026, 7, 20)), "2026年8月20日");
 });
+
+test("无公章时输出与原版一致（无 binData / imagedata）", async () => {
+  const xml = await renderDocument(draft, { date: new Date(2026, 7, 20) });
+  assert.ok(!xml.includes("<w:binData"));
+  assert.ok(!xml.includes("wordml://hongtou_seal.png"));
+  assert.deepEqual(validateGeneratedXml(xml), []);
+});
+
+const TINY_PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+  "base64"
+);
+
+async function withTempSeal(run) {
+  const { mkdtemp, writeFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const dir = await mkdtemp(join(tmpdir(), "hongtou-seal-"));
+  const sealPath = join(dir, "seal.png");
+  await writeFile(sealPath, TINY_PNG);
+  try {
+    return await run(sealPath);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+test("提供公章时 binData 与 v:shape 同处 <w:pict> 内且浮于文字之下", async () => {
+  await withTempSeal(async (sealPath) => {
+    const xml = await renderDocument(draft, { date: new Date(2026, 7, 20), seal: sealPath });
+    assert.ok(xml.includes('<w:pict><w:binData w:name="wordml://hongtou_seal.png" xml:space="preserve">'));
+    assert.ok(xml.includes('<v:imagedata src="wordml://hongtou_seal.png"'));
+    assert.ok(xml.includes('id="_x0000_s2090"'));
+    assert.ok(xml.includes("z-index:-1"));
+    assert.ok(xml.includes("<w10:wrap type=\"none\"/>"));
+    assert.deepEqual(validateGeneratedXml(xml), []);
+  });
+});
+
+test("公章几何参数可覆盖（直径/水平偏移/垂直偏移/旋转）", async () => {
+  await withTempSeal(async (sealPath) => {
+    const xml = await renderDocument(draft, {
+      date: new Date(2026, 7, 20),
+      seal: sealPath,
+      sealGeometry: { sizePt: 90, offsetXPt: 100, offsetYPt: -20, rotation: 15 },
+    });
+    assert.ok(xml.includes("width:90pt;height:90pt"));
+    assert.ok(xml.includes("margin-left:100pt;margin-top:-20pt"));
+    assert.ok(xml.includes("rotation:15"));
+  });
+});
