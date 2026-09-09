@@ -23,6 +23,14 @@ test("stripMarkdown 清除链接、强调、列表与代码符号", () => {
   assert.ok(!cleaned.includes("|"));
 });
 
+test("stripMarkdown 行内代码保留内容，不残留 $1 字面量", () => {
+  assert.equal(stripMarkdown("使用 `npm run build` 构建"), "使用 npm run build 构建");
+  assert.equal(stripMarkdown("执行 ```code``` 块"), "执行 code 块");
+  assert.equal(sanitizeText("先 `npm ci` 再 `npm test`"), "先 npm ci 再 npm test");
+  assert.ok(!stripMarkdown("示例 `value` 说明").includes("$1"));
+  assert.ok(!sanitizeText("示例 `value` 说明").includes("$1"));
+});
+
 test("占位符与排版动作字符被识别", () => {
   assert.ok(hasForbiddenContent("这是 xxxx 占位"));
   assert.ok(hasForbiddenContent("这是 ××× 占位"));
