@@ -18,6 +18,7 @@
     }
   },
   "files": [
+    "assets",
     "lib",
     "templates",
     "test",
