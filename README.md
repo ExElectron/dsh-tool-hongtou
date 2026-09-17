@@ -31,6 +31,24 @@ DeepSeek Harness 红头公文总结插件（Cordis 主机侧插件）——**两
 - **模型零排版权**：LLM 输出在进入渲染层前经过 `stripMarkdown`（链接、强调、列表、代码符号、表格管道）与 `hasForbiddenContent`（xxxx、×××、（空一行）、（空两格）、（此处填写…）等）双重清洗；非法内容直接回退，绝不进入文档。
 - **序号确定性生成**：`sections` 编号 `一、二、…`，子条款编号 `（一）（二）…`，由阶段二按数组顺序生成，杜绝模型序号错乱。
 
+## 公章
+
+插件默认给生成的公文加盖内置印章，图片位于 `assets/seal-default.png`，通过 `<w:binData>` 内嵌进 Word 2003 XML，浮在文字层之下，覆盖发文机关署名与成文日期两行。
+
+盖章行为由 `seal` 配置项控制，在 profile 的 `cordis.patch.yml` 中覆盖本插件的行即可：
+
+```yaml
+- id: hongtou
+  config:
+    seal: false
+```
+
+- 不配置 `seal`：使用内置印章
+- `seal: false` 或 `"off"` 或 `"0"`：跳过盖章，输出干净版面
+- `seal: 路径`：使用指定的公章图片，绝对路径直接使用，相对路径按会话工作目录解析，支持 `~` 与 `~/` 前缀
+
+环境变量 `HONDTOU_SEAL` 可作为配置的兜底。
+
 ## 安装 / 挂载
 
 插件通过 `dsh.bundle.patch` 声明挂载行。安装到 web profile：
@@ -77,4 +95,5 @@ node --test --test-isolation=none test/schema.test.js test/phase1.test.js test/p
 - `lib/fallback.js` — 确定性回退提炼（模型不可用时）。
 - `lib/log.js` — 会话事件日志序列化与统计。
 - `templates/document-skeleton.xml` — Word 2003 XML 模板骨架（标准红头版心，无文本框/批注）。
+- `assets/seal-default.png` — 内置公章图片，默认随公文一起加盖。
 - `test/` — schema / phase1 / phase2 / 端到端测试。
